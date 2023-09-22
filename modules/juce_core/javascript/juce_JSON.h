@@ -100,6 +100,15 @@ public:
                             bool allOnOneLine = false,
                             int maximumDecimalPlaces = 15);
 
+    /** Returns a string which contains a JSON-formatted representation of the StringPairArray object.
+        Keys are treated as JSON attributes, values as JSON values. If strings contain
+        any non-ASCII characters, you need to take care of them first.
+        If allOnOneLine is true, the result will be compacted into a single line of text
+        with no carriage-returns. If false, it will be laid-out in a more human-readable format.
+    */
+    static String toString (const StringPairArray& dataToFormat,
+                            bool allOnOneLine = false);
+
     /** Parses a string that was created with the toString() method.
         This is slightly different to the parse() methods because they will reject primitive
         values and only accept array or object definitions, whereas this method will handle

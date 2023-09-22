@@ -507,6 +507,50 @@ String JSON::toString (const var& data, const bool allOnOneLine, int maximumDeci
     return mo.toUTF8();
 }
 
+String JSON::toString (const StringPairArray& data, bool allOnOneLine)
+{
+    if (data.size() == 0)
+        return "{}";
+
+    MemoryOutputStream mo (1024);
+
+    mo << '{';
+
+    if (! allOnOneLine)
+        mo << newLine;
+
+    auto itemsLeft = data.size();
+
+    for (const auto& key : data.getAllKeys())
+    {
+        if (! allOnOneLine)
+            JSONFormatter::writeSpaces (mo, JSONFormatter::indentSize);
+
+        mo << '"';
+        JSONFormatter::writeString (mo, JSON::escapeString (key).getCharPointer());
+        mo << "\": \"";
+        JSONFormatter::writeString (mo, JSON::escapeString (data[key]).getCharPointer());
+        mo << '"';
+        
+        if (--itemsLeft)
+        {
+            mo << ',';
+
+            if (allOnOneLine)
+                mo << ' ';
+            else
+                mo << newLine;
+        }
+    }
+
+    if (! allOnOneLine)
+        mo << newLine;
+
+    mo << '}';
+
+    return mo.toUTF8();
+}
+
 void JSON::writeToStream (OutputStream& output, const var& data, const bool allOnOneLine, int maximumDecimalPlaces)
 {
     JSONFormatter::write (output, data, 0, allOnOneLine, maximumDecimalPlaces);
