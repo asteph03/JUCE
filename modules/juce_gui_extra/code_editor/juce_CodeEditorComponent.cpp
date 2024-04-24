@@ -1594,24 +1594,30 @@ void CodeEditorComponent::mouseDoubleClick (const MouseEvent& e)
 
 void CodeEditorComponent::mouseWheelMove (const MouseEvent& e, const MouseWheelDetails& wheel)
 {
-    if ((verticalScrollBar.isVisible() && ! approximatelyEqual (wheel.deltaY, 0.0f))
-         || (horizontalScrollBar.isVisible() && ! approximatelyEqual (wheel.deltaX, 0.0f)))
+    //CODE IS EDITED HERE
+    //isMouseOver function taken from juce_Component.cpp
+    //If true, then mouse wheel can be moved, and therefore fixes bug
+    if (Component::isMouseOver())
     {
+        if ((verticalScrollBar.isVisible() && !approximatelyEqual(wheel.deltaY, 0.0f))
+            || (horizontalScrollBar.isVisible() && !approximatelyEqual(wheel.deltaX, 0.0f)))
         {
-            MouseWheelDetails w (wheel);
-            w.deltaX = 0;
-            verticalScrollBar.mouseWheelMove (e, w);
-        }
+            {
+                MouseWheelDetails w(wheel);
+                w.deltaX = 0;
+                verticalScrollBar.mouseWheelMove(e, w);
+            }
 
-        {
-            MouseWheelDetails w (wheel);
-            w.deltaY = 0;
-            horizontalScrollBar.mouseWheelMove (e, w);
+            {
+                MouseWheelDetails w(wheel);
+                w.deltaY = 0;
+                horizontalScrollBar.mouseWheelMove(e, w);
+            }
         }
-    }
-    else
-    {
-        Component::mouseWheelMove (e, wheel);
+        else
+        {
+            Component::mouseWheelMove(e, wheel);
+        }
     }
 }
 
